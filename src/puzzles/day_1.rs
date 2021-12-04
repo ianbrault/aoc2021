@@ -22,7 +22,8 @@ impl Day1 {
 impl Puzzle for Day1 {
     // How many measurements are larger than the previous measurement?
     fn part_1(&self) -> Result<Solution> {
-        let n = self.sonar_depths
+        let n = self
+            .sonar_depths
             .iter()
             .pair_with(|x, y| *y as i64 - *x as i64)
             .filter(|&n| n > 0)
@@ -35,7 +36,8 @@ impl Puzzle for Day1 {
     // larger than the previous sum?
     fn part_2(&self) -> Result<Solution> {
         // generate the three-sums
-        let three_sums = self.sonar_depths
+        let three_sums = self
+            .sonar_depths
             .iter()
             .pair_with(|x, y| y + x)
             .zip(self.sonar_depths.iter().skip(2))

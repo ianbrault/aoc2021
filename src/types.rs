@@ -45,3 +45,18 @@ pub trait Puzzle {
     fn part_1(&self) -> Result<Solution>;
     fn part_2(&self) -> Result<Solution>;
 }
+
+#[derive(Debug)]
+pub enum PuzzleError {
+    NoSolution,
+}
+
+impl fmt::Display for PuzzleError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::NoSolution => write!(f, "no solution found"),
+        }
+    }
+}
+
+impl error::Error for PuzzleError {}

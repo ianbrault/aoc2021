@@ -5,6 +5,13 @@
 use std::iter::Peekable;
 use std::str::FromStr;
 
+// a macro for a split-and-match pattern which is used frequently
+macro_rules! split {
+    ($string:ident, $splitter:expr) => {
+        $string.split($splitter).collect::<Vec<&str>>().as_slice()
+    };
+}
+
 // splits input into non-empty lines
 pub fn input_to_lines(input: &'static str) -> impl Iterator<Item = &str> {
     input.split('\n').filter(|s| !s.is_empty())

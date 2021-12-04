@@ -2,9 +2,11 @@
 ** src/main.rs
 */
 
+#[macro_use]
+mod utils;
+
 mod puzzles;
 mod types;
-mod utils;
 
 use std::env;
 
@@ -22,21 +24,26 @@ fn parse_args() -> Day {
 
 fn main() {
     // determine which puzzle to run
-    let puzzles = match parse_args() {
+    let which_puzzle = parse_args();
+    let puzzles = match which_puzzle {
         Day::Which(n) => vec![puzzles::all().into_iter().nth(n - 1).unwrap()],
         Day::All => puzzles::all(),
     };
 
     for (day, puzzle) in puzzles.into_iter().enumerate() {
+        let day = match which_puzzle {
+            Day::Which(n) => n,
+            Day::All => day + 1,
+        };
         // part 1
         match puzzle.part_1() {
-            Ok(solution) => println!("day {:02} part 1: {}", day + 1, solution),
-            Err(err) => println!("day {:02} part 1: {}", day + 1, err),
+            Ok(solution) => println!("day {:02} part 1: {}", day, solution),
+            Err(err) => println!("day {:02} part 1: {}", day, err),
         };
         // part 2
         match puzzle.part_2() {
-            Ok(solution) => println!("day {:02} part 2: {}", day + 1, solution),
-            Err(err) => println!("day {:02} part 1: {}", day + 1, err),
+            Ok(solution) => println!("day {:02} part 2: {}", day, solution),
+            Err(err) => println!("day {:02} part 1: {}", day, err),
         };
     }
 }

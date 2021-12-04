@@ -15,7 +15,7 @@ use crate::types::Puzzle;
 
 pub fn all() -> Vec<Box<dyn Puzzle>> {
     vec![
-        <P>
+<P>
     ]
 }
 """
@@ -26,7 +26,7 @@ puzzle_template = """\
 ** https://adventofcode.com/2021/day/<D>
 */
 
-use crate::types::{Puzzle, Result, Solution};
+use crate::types::{Puzzle, PuzzleError, Result, Solution};
 
 const INPUT: &str = include_str!("../../input/<D>.txt");
 
@@ -41,12 +41,12 @@ impl Day<D> {
 impl Puzzle for Day<D> {
     // [QUESTION]
     fn part_1(&self) -> Result<Solution> {
-        unimplemented!()
+        Err(PuzzleError::NoSolution)?
     }
 
     // [QUESTION]
     fn part_2(&self) -> Result<Solution> {
-        unimplemented!()
+        Err(PuzzleError::NoSolution)?
     }
 }
 """
@@ -74,7 +74,8 @@ if __name__ == "__main__":
     with open(os.path.join(puzzle_dir, "mod.rs"), "w") as mod_file:
         mods = "\n".join(f"mod day_{i + 1};" for i in range(n))
         puzzles = "\n".join(
-            f"    Box::new(day_{i + 1}::Day{i + 1}::new())," for i in range(n))
+            f"        Box::new(day_{i + 1}::Day{i + 1}::new()),"
+            for i in range(n))
         mod_file.write(
             mod_template.replace("<M>", mods).replace("<P>", puzzles))
 
