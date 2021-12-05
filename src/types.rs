@@ -14,9 +14,21 @@ pub enum Solution {
     UInt(u64),
 }
 
+impl From<i32> for Solution {
+    fn from(n: i32) -> Self {
+        Self::Int(n as i64)
+    }
+}
+
 impl From<i64> for Solution {
     fn from(n: i64) -> Self {
         Self::Int(n)
+    }
+}
+
+impl From<u32> for Solution {
+    fn from(n: u32) -> Self {
+        Self::UInt(n as u64)
     }
 }
 
