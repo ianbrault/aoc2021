@@ -8,6 +8,7 @@ mod day_3;
 mod day_4;
 mod day_5;
 mod day_6;
+mod day_7;
 
 use crate::types::Puzzle;
 
@@ -19,5 +20,6 @@ pub fn all() -> Vec<Box<dyn Puzzle>> {
         Box::new(day_4::Day4::new()),
         Box::new(day_5::Day5::new()),
         Box::new(day_6::Day6::new()),
+        Box::new(day_7::Day7::new()),
     ]
 }
