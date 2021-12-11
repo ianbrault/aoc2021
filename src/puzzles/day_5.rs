@@ -138,6 +138,7 @@ impl Line {
         }
     }
 
+    #[allow(clippy::suspicious_operation_groupings)]
     fn verticals_intersect(line_a: &Self, line_b: &Self) -> bool {
         let (bot, top) = Line::sort_by_y(line_a, line_b);
         bot.p0.x == top.p0.x && top.y_min() <= bot.y_max()
@@ -164,14 +165,14 @@ impl Line {
             // NOTE: start with numbers as floating point
             let ma = line_a.slope.unwrap() as f64;
             let mb = line_b.slope.unwrap() as f64;
-            let a = Matrix2D::new(ma, -1.0, mb, -1.0);
-            let b = Vector2::new(
+            let mat = Matrix2D::new(ma, -1.0, mb, -1.0);
+            let vec = Vector2::new(
                 -line_a.y_intercept.unwrap() as f64,
                 -line_b.y_intercept.unwrap() as f64,
             );
-            let c = Matrix2D::solve_system(&a, &b);
-            let x = c.data[0];
-            let y = c.data[1];
+            let sol = Matrix2D::solve_system(&mat, &vec);
+            let x = sol.data[0];
+            let y = sol.data[1];
             // ensure that the intersection is a whole number
             if x.fract() == 0.0 && y.fract() == 0.0 {
                 Some(Point::new(x as i64, y as i64))
@@ -263,13 +264,13 @@ impl Day5 {
                 }
                 // check the endpoint
                 if lline.contains_point(&p) {
-                    intersections.insert(p.clone());
+                    intersections.insert(p);
                 }
             }
         }
     }
 
-    fn find_intersections(lines: &Vec<Line>) -> HashSet<Point> {
+    fn find_intersections(lines: &[Line]) -> HashSet<Point> {
         let n_lines = lines.len();
         let mut intersections = HashSet::new();
 
@@ -281,19 +282,11 @@ impl Day5 {
                 if line_i.slope == line_j.slope {
                     Self::colinear_intersections(line_i, line_j, &mut intersections);
                 } else if line_i.is_vertical() || line_j.is_vertical() {
-                    match Self::intersection_with_vertical(line_i, line_j) {
-                        Some(p) => {
-                            intersections.insert(p);
-                        }
-                        None => (),
+                    if let Some(p) = Self::intersection_with_vertical(line_i, line_j) {
+                        intersections.insert(p);
                     }
-                } else {
-                    match Line::intersection(line_i, line_j) {
-                        Some(p) => {
-                            intersections.insert(p);
-                        }
-                        None => (),
-                    };
+                } else if let Some(p) = Line::intersection(line_i, line_j) {
+                    intersections.insert(p);
                 }
             }
         }
@@ -312,7 +305,7 @@ impl Puzzle for Day5 {
             .iter()
             .filter(|l| l.is_horizontal() || l.is_vertical())
             // note: need to dereference
-            .map(|l| l.clone())
+            .cloned()
             .collect::<Vec<_>>();
         let intersections = Self::find_intersections(&horizontal_vertical);
         Ok(intersections.len().into())

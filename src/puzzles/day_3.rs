@@ -30,6 +30,7 @@ impl From<&str> for Binary {
     }
 }
 
+#[allow(clippy::from_over_into)]
 impl Into<u32> for &Binary {
     fn into(self) -> u32 {
         let mut n = 0;
@@ -46,7 +47,7 @@ pub struct Day3 {
 }
 
 impl Day3 {
-    fn count_bits(numbers: &Vec<Binary>) -> [u64; N_BITS] {
+    fn count_bits(numbers: &[Binary]) -> [u64; N_BITS] {
         let mut bit_count = [0; N_BITS];
 
         for number in numbers.iter() {
@@ -61,7 +62,7 @@ impl Day3 {
     }
 
     pub fn new() -> Self {
-        let numbers = utils::input_to_lines(INPUT).map(Binary::from).collect();
+        let numbers = utils::input_to_lines(INPUT).map(Binary::from).collect::<Vec<_>>();
         let bit_counts = Self::count_bits(&numbers);
         Self {
             numbers,
@@ -119,7 +120,7 @@ impl Puzzle for Day3 {
             oxygen_numbers = oxygen_numbers
                 .iter()
                 .filter(|n| n.bit(i) == bit)
-                .map(|n| n.clone())
+                .cloned()
                 .collect();
             if oxygen_numbers.len() == 1 {
                 break;
@@ -135,7 +136,7 @@ impl Puzzle for Day3 {
             co2_numbers = co2_numbers
                 .iter()
                 .filter(|n| n.bit(i) == bit)
-                .map(|n| n.clone())
+                .cloned()
                 .collect();
             if co2_numbers.len() == 1 {
                 break;

@@ -141,7 +141,7 @@ impl Puzzle for Day4 {
 
         // reset the boards before returning
         self.reset_boards();
-        Err(PuzzleError::NoSolution)?
+        Err(PuzzleError::NoSolution.into())
     }
 
     // Figure out which board will win last. Once it wins, what would its final
@@ -163,7 +163,7 @@ impl Puzzle for Day4 {
         }
         match last_board {
             Some(score) => Ok(score.into()),
-            None => Err(PuzzleError::NoSolution)?,
+            None => Err(PuzzleError::NoSolution.into()),
         }
     }
 }
