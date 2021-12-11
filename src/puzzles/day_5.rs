@@ -58,9 +58,17 @@ impl fmt::Debug for Point {
 struct Line {
     p0: Point,
     p1: Point,
+    slope: Option<i64>,
+    y_intercept: Option<i64>,
 }
 
 impl Line {
+    fn new(p0: Point, p1: Point) -> Self {
+        let slope = Self::get_slope(&p0, &p1);
+        let y_intercept = Self::get_y_intercept(&p0, &p1);
+        Self { p0, p1, slope, y_intercept }
+    }
+
     fn is_horizontal(&self) -> bool {
         self.p0.y == self.p1.y
     }
@@ -85,21 +93,22 @@ impl Line {
         cmp::max(self.p0.y, self.p1.y)
     }
 
-    fn slope(&self) -> Option<i64> {
-        if self.is_vertical() {
+    fn get_slope(p0: &Point, p1: &Point) -> Option<i64> {
+        if p0.x == p1.x {
             None
         } else {
-            let (lp, rp) = Point::sort_by_x(&self.p0, &self.p1);
+            let (lp, rp) = Point::sort_by_x(p0, p1);
             Some((rp.y - lp.y) / (rp.x - lp.x))
         }
     }
 
-    fn y_intercept(&self) -> Option<i64> {
-        if self.is_vertical() {
+    fn get_y_intercept(p0: &Point, p1: &Point) -> Option<i64> {
+        let slope = Self::get_slope(p0, p1);
+        if p0.x == p1.x {
             None
         } else {
             // solve using p0
-            Some(self.p0.y - (self.p0.x * self.slope().unwrap()))
+            Some(p0.y - (p0.x * slope.unwrap()))
         }
     }
 
@@ -107,7 +116,7 @@ impl Line {
         if self.is_vertical() {
             p.x == self.p0.x && (self.y_min()..=self.y_max()).contains(&p.y)
         } else {
-            p.y == (self.slope().unwrap() * p.x) + self.y_intercept().unwrap()
+            p.y == (self.slope.unwrap() * p.x) + self.y_intercept.unwrap()
                 && (self.x_min()..=self.x_max()).contains(&p.x)
                 && (self.y_min()..=self.y_max()).contains(&p.y)
         }
@@ -153,12 +162,12 @@ impl Line {
         if Self::has_intersection(line_a, line_b) {
             // solve the system of equations
             // NOTE: start with numbers as floating point
-            let ma = line_a.slope().unwrap() as f64;
-            let mb = line_b.slope().unwrap() as f64;
+            let ma = line_a.slope.unwrap() as f64;
+            let mb = line_b.slope.unwrap() as f64;
             let a = Matrix2D::new(ma, -1.0, mb, -1.0);
             let b = Vector2::new(
-                -line_a.y_intercept().unwrap() as f64,
-                -line_b.y_intercept().unwrap() as f64,
+                -line_a.y_intercept.unwrap() as f64,
+                -line_b.y_intercept.unwrap() as f64,
             );
             let c = Matrix2D::solve_system(&a, &b);
             let x = c.data[0];
@@ -182,7 +191,7 @@ impl From<&str> for Line {
             [sp0, sp1] => {
                 let p0 = Point::from(*sp0);
                 let p1 = Point::from(*sp1);
-                Self { p0, p1 }
+                Self::new(p0, p1)
             }
             _ => panic!("invalid line: {}", s),
         }
@@ -214,7 +223,7 @@ impl Day5 {
 
         let vx = vline.p0.x;
         if (other.x_min()..=other.x_max()).contains(&vx) {
-            let y = (other.slope().unwrap() * vx) + other.y_intercept().unwrap();
+            let y = (other.slope.unwrap() * vx) + other.y_intercept.unwrap();
             let p = Point::new(vx, y);
             if vline.contains_point(&p) {
                 Some(p)
@@ -238,7 +247,7 @@ impl Day5 {
                 }
             }
         } else {
-            let slope = line_a.slope().unwrap();
+            let slope = line_a.slope.unwrap();
             // sort the lines by x
             let (lline, rline) = Line::sort_by_x(&line_a, &line_b);
             // consider if points on the rightmost line fall along the leftmost
@@ -269,7 +278,7 @@ impl Day5 {
             for j in (i + 1)..n_lines {
                 let line_i = &lines[i];
                 let line_j = &lines[j];
-                if line_i.slope() == line_j.slope() {
+                if line_i.slope == line_j.slope {
                     Self::colinear_intersections(line_i, line_j, &mut intersections);
                 } else if line_i.is_vertical() || line_j.is_vertical() {
                     match Self::intersection_with_vertical(line_i, line_j) {
