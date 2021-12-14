@@ -66,7 +66,12 @@ impl Line {
     fn new(p0: Point, p1: Point) -> Self {
         let slope = Self::get_slope(&p0, &p1);
         let y_intercept = Self::get_y_intercept(&p0, &p1);
-        Self { p0, p1, slope, y_intercept }
+        Self {
+            p0,
+            p1,
+            slope,
+            y_intercept,
+        }
     }
 
     fn is_horizontal(&self) -> bool {

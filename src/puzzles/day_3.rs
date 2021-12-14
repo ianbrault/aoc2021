@@ -62,7 +62,9 @@ impl Day3 {
     }
 
     pub fn new() -> Self {
-        let numbers = utils::input_to_lines(INPUT).map(Binary::from).collect::<Vec<_>>();
+        let numbers = utils::input_to_lines(INPUT)
+            .map(Binary::from)
+            .collect::<Vec<_>>();
         let bit_counts = Self::count_bits(&numbers);
         Self {
             numbers,

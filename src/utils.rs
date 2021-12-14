@@ -93,3 +93,16 @@ where
     F: Fn(&'a N, &'a N) -> T,
 {
 }
+
+// selects the other element in a 2-wide array
+pub fn other<T>(array: [T; 2], val: T) -> T
+where
+    T: PartialEq,
+    T: Copy,
+{
+    if array[0] == val {
+        array[1]
+    } else {
+        array[0]
+    }
+}
