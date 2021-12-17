@@ -3,6 +3,7 @@
 */
 
 mod day_1;
+mod day_10;
 mod day_2;
 mod day_3;
 mod day_4;
@@ -25,5 +26,6 @@ pub fn all() -> Vec<Box<dyn Puzzle>> {
         Box::new(day_7::Day7::new()),
         Box::new(day_8::Day8::new()),
         Box::new(day_9::Day9::new()),
+        Box::new(day_10::Day10::new()),
     ]
 }
