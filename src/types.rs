@@ -2,9 +2,14 @@
 ** src/types.rs
 */
 
+use crate::utils;
+
+use num::Integer;
+
 use std::error;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
+use std::str::FromStr;
 
 pub type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 
@@ -73,6 +78,172 @@ impl fmt::Display for PuzzleError {
 }
 
 impl error::Error for PuzzleError {}
+
+pub struct Array2D<T, const W: usize, const H: usize> {
+    data: [[T; W]; H],
+}
+
+impl<T, const W: usize, const H: usize> Array2D<T, W, H> {
+    pub fn new() -> Self
+    where
+        T: Copy + Default,
+    {
+        let data = [[T::default(); W]; H];
+        Self { data }
+    }
+
+    pub const fn left(i: usize, j: usize) -> Option<(usize, usize)> {
+        if j > 0 {
+            Some((i, j - 1))
+        } else {
+            None
+        }
+    }
+
+    pub const fn right(i: usize, j: usize) -> Option<(usize, usize)> {
+        if j < W - 1 {
+            Some((i, j + 1))
+        } else {
+            None
+        }
+    }
+
+    pub const fn up(i: usize, j: usize) -> Option<(usize, usize)> {
+        if i > 0 {
+            Some((i - 1, j))
+        } else {
+            None
+        }
+    }
+
+    pub const fn down(i: usize, j: usize) -> Option<(usize, usize)> {
+        if i < H - 1 {
+            Some((i + 1, j))
+        } else {
+            None
+        }
+    }
+
+    pub const fn up_left(i: usize, j: usize) -> Option<(usize, usize)> {
+        if i > 0 && j > 0 {
+            Some((i - 1, j - 1))
+        } else {
+            None
+        }
+    }
+
+    pub const fn up_right(i: usize, j: usize) -> Option<(usize, usize)> {
+        if i > 0 && j < W - 1 {
+            Some((i - 1, j + 1))
+        } else {
+            None
+        }
+    }
+
+    pub const fn down_left(i: usize, j: usize) -> Option<(usize, usize)> {
+        if i < H - 1 && j > 0 {
+            Some((i + 1, j - 1))
+        } else {
+            None
+        }
+    }
+
+    pub const fn down_right(i: usize, j: usize) -> Option<(usize, usize)> {
+        if i < H - 1 && j < W - 1 {
+            Some((i + 1, j + 1))
+        } else {
+            None
+        }
+    }
+
+    pub const fn neighbors(i: usize, j: usize) -> [Option<(usize, usize)>; 4] {
+        [
+            Self::left(i, j),
+            Self::right(i, j),
+            Self::up(i, j),
+            Self::down(i, j),
+        ]
+    }
+
+    pub const fn neighbors_with_diagonal(i: usize, j: usize) -> [Option<(usize, usize)>; 8] {
+        [
+            Self::left(i, j),
+            Self::right(i, j),
+            Self::up(i, j),
+            Self::down(i, j),
+            Self::up_left(i, j),
+            Self::up_right(i, j),
+            Self::down_left(i, j),
+            Self::down_right(i, j),
+        ]
+    }
+
+    pub fn get(&self, i: usize, j: usize) -> T
+    where
+        T: Copy,
+    {
+        self.data[i][j]
+    }
+
+    pub fn set(&mut self, i: usize, j: usize, val: T) {
+        self.data[i][j] = val;
+    }
+
+    fn iter_indices(&self) -> impl Iterator<Item = (usize, usize)> {
+        itertools::iproduct!(0..H, 0..W)
+    }
+
+    pub fn iter_with_indices(&self) -> impl Iterator<Item = (usize, usize, &T)> {
+        // need collect().into_iter() in order to avoid lifetime issues with the map closure
+        self.iter_indices()
+            .map(|(i, j)| (i, j, &self.data[i][j]))
+            .collect::<Vec<_>>()
+            .into_iter()
+    }
+
+    pub fn find_index<P>(&self, predicate: P) -> Option<(usize, usize)>
+    where
+        P: Fn(&T) -> bool,
+    {
+        self.iter_with_indices()
+            .find(|(_, _, x)| predicate(x))
+            .map(|(i, j, _)| (i, j))
+    }
+}
+
+impl<T, const W: usize, const H: usize> Array2D<T, W, H>
+where
+    T: Copy + Integer,
+{
+    pub fn increment(&mut self, i: usize, j: usize) {
+        self.data[i][j] = self.data[i][j] + T::one();
+    }
+}
+
+impl<T, const W: usize, const H: usize> From<&'static str> for Array2D<T, W, H>
+where
+    T: Copy + Default + FromStr,
+    <T as FromStr>::Err: fmt::Debug,
+{
+    fn from(s: &'static str) -> Self {
+        let mut arr = Self::new();
+        for (i, line) in utils::input_to_lines(s).enumerate() {
+            for (j, c) in line.chars().enumerate() {
+                arr.data[i][j] = c.to_string().parse().unwrap();
+            }
+        }
+        arr
+    }
+}
+
+impl<T, const W: usize, const H: usize> Default for Array2D<T, W, H>
+where
+    T: Copy + Default,
+{
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 macro_rules! bind_els {
     ($self:expr, $a:ident, $b:ident) => {

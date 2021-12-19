@@ -3,8 +3,7 @@
 ** https://adventofcode.com/2021/day/9
 */
 
-use crate::types::{Puzzle, Result, Solution};
-use crate::utils;
+use crate::types::{Array2D, Puzzle, Result, Solution};
 
 use std::collections::{HashSet, VecDeque};
 use std::convert::TryInto;
@@ -14,84 +13,35 @@ const WIDTH: usize = 100;
 const HEIGHT: usize = 100;
 
 pub struct Day9 {
-    heightmap: [[u8; WIDTH]; HEIGHT],
+    heightmap: Array2D<u8, WIDTH, HEIGHT>,
 }
 
 impl Day9 {
     pub fn new() -> Self {
-        let mut heightmap = [[0; WIDTH]; HEIGHT];
-        for (i, line) in utils::input_to_lines(INPUT).enumerate() {
-            for (j, c) in line.chars().enumerate() {
-                heightmap[i][j] = c.to_digit(10).unwrap() as u8;
-            }
-        }
+        let heightmap = Array2D::from(INPUT);
         Self { heightmap }
     }
 
-    const fn left(i: usize, j: usize) -> Option<(usize, usize)> {
-        if j > 0 {
-            Some((i, j - 1))
-        } else {
-            None
-        }
-    }
-
-    const fn right(i: usize, j: usize) -> Option<(usize, usize)> {
-        if j < WIDTH - 1 {
-            Some((i, j + 1))
-        } else {
-            None
-        }
-    }
-
-    const fn up(i: usize, j: usize) -> Option<(usize, usize)> {
-        if i > 0 {
-            Some((i - 1, j))
-        } else {
-            None
-        }
-    }
-
-    const fn down(i: usize, j: usize) -> Option<(usize, usize)> {
-        if i < HEIGHT - 1 {
-            Some((i + 1, j))
-        } else {
-            None
-        }
-    }
-
     fn neighbors(&self, i: usize, j: usize) -> [Option<u8>; 4] {
-        let neighbor_coords = [
-            Self::left(i, j),
-            Self::right(i, j),
-            Self::up(i, j),
-            Self::down(i, j),
-        ];
-        neighbor_coords
+        Array2D::<u8, WIDTH, HEIGHT>::neighbors(i, j)
             .iter()
-            .map(|n| n.map(|(i, j)| self.heightmap[i][j]))
+            .map(|n| n.map(|(i, j)| self.heightmap.get(i, j)))
             .collect::<Vec<_>>()
             .try_into()
             .unwrap()
     }
 
     fn neighbors_with_coords(&self, i: usize, j: usize) -> [Option<(usize, usize, u8)>; 4] {
-        let neighbor_coords = [
-            Self::left(i, j),
-            Self::right(i, j),
-            Self::up(i, j),
-            Self::down(i, j),
-        ];
-        neighbor_coords
+        Array2D::<u8, WIDTH, HEIGHT>::neighbors(i, j)
             .iter()
-            .map(|n| n.map(|(i, j)| (i, j, self.heightmap[i][j])))
+            .map(|n| n.map(|(i, j)| (i, j, self.heightmap.get(i, j))))
             .collect::<Vec<_>>()
             .try_into()
             .unwrap()
     }
 
     fn is_lowpoint(&self, i: usize, j: usize) -> bool {
-        let here = self.heightmap[i][j];
+        let here = self.heightmap.get(i, j);
         self.neighbors(i, j)
             .iter()
             .filter_map(|&x| x)
@@ -134,7 +84,7 @@ impl Puzzle for Day9 {
         for i in 0..HEIGHT {
             for j in 0..WIDTH {
                 if self.is_lowpoint(i, j) {
-                    sum += 1 + self.heightmap[i][j] as u64;
+                    sum += 1 + self.heightmap.get(i, j) as u64;
                 }
             }
         }
