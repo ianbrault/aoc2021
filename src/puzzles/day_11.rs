@@ -113,7 +113,7 @@ mod tests {
     }
 
     #[test]
-    fn tests_flashes() {
+    fn test_flashes() {
         let day = get_day();
         print_grid(&day);
         assert_eq!(day.run_step(), 0);
@@ -123,7 +123,7 @@ mod tests {
     }
 
     #[test]
-    fn tests_flashes_synchronized() {
+    fn test_flashes_synchronized() {
         let day = get_day();
         // should synchronize on step 195
         let _ = day.run_steps(194);
