@@ -1,6 +1,10 @@
 /*
-** src/types.rs
+** src/types/mod.rs
 */
+
+mod geometry;
+
+pub use self::geometry::{Line, Point};
 
 use crate::utils;
 
@@ -18,6 +22,7 @@ pub type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 pub enum Solution {
     Int(i64),
     UInt(u64),
+    String(String),
 }
 
 impl From<i32> for Solution {
@@ -50,11 +55,18 @@ impl From<usize> for Solution {
     }
 }
 
+impl From<String> for Solution {
+    fn from(s: String) -> Self {
+        Self::String(s)
+    }
+}
+
 impl fmt::Display for Solution {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Int(i) => write!(f, "{}", i),
             Self::UInt(u) => write!(f, "{}", u),
+            Self::String(s) => write!(f, "{}", s),
         }
     }
 }

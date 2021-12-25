@@ -12,6 +12,16 @@ macro_rules! split {
     };
 }
 
+// similar to the split! macro above, but binds the provided identifiers
+macro_rules! split_into {
+    ($string:ident, $splitter:expr, $($var:ident),+) => {
+        let ($($var),+) = match split!($string, $splitter) {
+            [$($var),+] => ($(*$var),+),
+            _ => unreachable!(),
+        };
+    };
+}
+
 // splits input into non-empty lines
 pub fn input_to_lines(input: &'static str) -> impl Iterator<Item = &str> {
     input.split('\n').filter(|s| !s.is_empty())

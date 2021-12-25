@@ -8,7 +8,6 @@ use crate::types::{Puzzle, Result, Solution};
 use std::cell::RefCell;
 
 const INPUT: &str = include_str!("../../input/6.txt");
-// const INPUT: &str = include_str!("../../input/6.dbg.txt");
 const LIFECYCLE: usize = 6;
 const INACTIVE_PERIOD: usize = 2;
 

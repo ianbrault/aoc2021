@@ -41,12 +41,12 @@ impl Day<D> {
 impl Puzzle for Day<D> {
     // [QUESTION]
     fn part_1(&self) -> Result<Solution> {
-        Err(PuzzleError::NoSolution)?
+        Err(PuzzleError::NoSolution.into())
     }
 
     // [QUESTION]
     fn part_2(&self) -> Result<Solution> {
-        Err(PuzzleError::NoSolution)?
+        Err(PuzzleError::NoSolution.into())
     }
 }
 """
