@@ -10,8 +10,10 @@ use crate::utils;
 
 use num::Integer;
 
+use std::collections::HashMap;
 use std::error;
 use std::fmt;
+use std::hash::Hash;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
 
@@ -338,5 +340,57 @@ where
         bind_els!(self, a, b, c, d);
         bind_els!(rhs, e, f);
         Vector2::new((a * e) + (b * f), (c * e) + (d * f))
+    }
+}
+
+pub struct Counter<T> {
+    counts: HashMap<T, usize>,
+}
+
+impl<T> Counter<T>
+where
+    T: Eq + Hash,
+{
+    pub fn new() -> Self {
+        Self {
+            counts: HashMap::new(),
+        }
+    }
+
+    pub fn insert(&mut self, val: T) {
+        let el = self.counts.entry(val).or_insert(0);
+        *el += 1;
+    }
+
+    pub fn insert_n(&mut self, val: T, count: usize) {
+        let el = self.counts.entry(val).or_insert(0);
+        *el += count;
+    }
+
+    pub fn min(&self) -> Option<usize> {
+        self.counts.values().min().copied()
+    }
+
+    pub fn max(&self) -> Option<usize> {
+        self.counts.values().max().copied()
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = (&T, &usize)> {
+        self.counts.iter()
+    }
+}
+
+impl<T, I> From<I> for Counter<T>
+where
+    T: Clone + Eq + Hash,
+    I: Iterator<Item = T>,
+{
+    fn from(it: I) -> Self {
+        let mut counts = HashMap::new();
+        for el in it {
+            let count = counts.entry(el.clone()).or_insert(0);
+            *count += 1;
+        }
+        Self { counts }
     }
 }

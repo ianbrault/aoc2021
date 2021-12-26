@@ -82,13 +82,15 @@ impl Day13 {
         let y_max = self.points.borrow().iter().map(|p| p.y).max().unwrap();
         for y in 0..=y_max {
             let mut s = String::with_capacity(x_max as usize);
-            let px = self.points.borrow().iter().filter(|p| p.y == y).map(|p| p.x).collect::<HashSet<_>>();
+            let px = self
+                .points
+                .borrow()
+                .iter()
+                .filter(|p| p.y == y)
+                .map(|p| p.x)
+                .collect::<HashSet<_>>();
             for x in 0..=x_max {
-                s += if px.contains(&x) {
-                    "#"
-                } else {
-                    " "
-                };
+                s += if px.contains(&x) { "#" } else { " " };
             }
             grid.push(s);
         }
