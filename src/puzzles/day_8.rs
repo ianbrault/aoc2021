@@ -119,7 +119,7 @@ impl SevenSegment {
             2 => 1,
             3 => 7,
             4 => 4,
-            5 => match self.segments_solved::<5>(&solution) {
+            5 => match self.segments_solved::<5>(solution) {
                 [Segment::A, Segment::C, Segment::D, Segment::E, Segment::G] => 2,
                 [Segment::A, Segment::C, Segment::D, Segment::F, Segment::G] => 3,
                 [Segment::A, Segment::B, Segment::D, Segment::F, Segment::G] => 5,
@@ -127,7 +127,7 @@ impl SevenSegment {
                     unreachable!();
                 }
             },
-            6 => match self.segments_solved::<6>(&solution) {
+            6 => match self.segments_solved::<6>(solution) {
                 [Segment::A, Segment::B, Segment::C, Segment::E, Segment::F, Segment::G] => 0,
                 [Segment::A, Segment::B, Segment::D, Segment::E, Segment::F, Segment::G] => 6,
                 [Segment::A, Segment::B, Segment::C, Segment::D, Segment::F, Segment::G] => 9,

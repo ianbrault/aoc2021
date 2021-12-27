@@ -61,7 +61,7 @@ impl BingoBoard {
         let mut sum: u64 = 0;
         for number in self.numbers.iter() {
             let pos = self.positions.get(number).unwrap();
-            if !self.marked.contains(&pos) {
+            if !self.marked.contains(pos) {
                 sum += *number as u64;
             }
         }

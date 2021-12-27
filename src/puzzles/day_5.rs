@@ -56,7 +56,7 @@ impl Day5 {
         } else {
             let slope = line_a.slope.unwrap();
             // sort the lines by x
-            let (lline, rline) = Line::sort_by_x(&line_a, &line_b);
+            let (lline, rline) = Line::sort_by_x(line_a, line_b);
             // consider if points on the rightmost line fall along the leftmost
             let (lp, rp) = Point::sort_by_x(&rline.p0, &rline.p1);
             if lline.contains_point(lp) {
