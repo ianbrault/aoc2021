@@ -35,6 +35,7 @@ where
 {
     input_to_lines(input).map(|s| s.parse::<T>().unwrap())
 }
+
 // takes an iterator and transforms it into a new iterator which combines the
 // current and next elements using the provided function
 pub struct PairWithIter<I, F>
