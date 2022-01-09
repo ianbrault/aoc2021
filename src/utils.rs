@@ -22,6 +22,16 @@ macro_rules! split_into {
     };
 }
 
+// bind a variable to each Vec member when the vector is a known size
+macro_rules! bind_vec_deref {
+    ($vec:expr, $($var:ident),+) => {
+        let ($($var),+) = match $vec.as_slice() {
+            [$($var),+] => ($(*$var),+),
+            _ => unreachable!(),
+        };
+    };
+}
+
 // splits input into non-empty lines
 pub fn input_to_lines(input: &'static str) -> impl Iterator<Item = &str> {
     input.split('\n').filter(|s| !s.is_empty())

@@ -102,24 +102,14 @@ mod tests {
         Day11 { energy_levels }
     }
 
-    fn print_grid(d: &Day11) {
-        for row in 0..SIZE {
-            for col in 0..SIZE {
-                print!("{}", d.energy_levels.borrow().get(row, col));
-            }
-            println!();
-        }
-        println!();
-    }
-
     #[test]
     fn test_flashes() {
         let day = get_day();
-        print_grid(&day);
+        // print_grid(&day);
         assert_eq!(day.run_step(), 0);
-        print_grid(&day);
+        // print_grid(&day);
         assert_eq!(day.run_step(), 35);
-        print_grid(&day);
+        // print_grid(&day);
     }
 
     #[test]
@@ -128,6 +118,6 @@ mod tests {
         // should synchronize on step 195
         let _ = day.run_steps(194);
         assert_eq!(day.run_step(), (SIZE * SIZE) as u64);
-        print_grid(&day);
+        // print_grid(&day);
     }
 }
