@@ -7,21 +7,22 @@ use crate::types::{Puzzle, Result, Solution};
 
 use std::cell::RefCell;
 
-const INPUT: &str = include_str!("../../input/6.txt");
 const LIFECYCLE: usize = 6;
 const INACTIVE_PERIOD: usize = 2;
 
 pub struct Day6 {
+    input: &'static str,
     // count the number of fish with each timer to save space/time
     // need RefCell for interior mutability
     fish: RefCell<[u64; LIFECYCLE + INACTIVE_PERIOD + 1]>,
 }
 
 impl Day6 {
-    pub fn new() -> Self {
+    pub fn new(input: &'static str) -> Self {
         // empty initialization then call initialize_fish_array
         // marginally more inefficient but cleaner
         let new = Self {
+            input,
             fish: RefCell::new([0; LIFECYCLE + INACTIVE_PERIOD + 1]),
         };
         new.initialize_fish_array();
@@ -30,7 +31,7 @@ impl Day6 {
 
     fn initialize_fish_array(&self) {
         let mut fish = [0; LIFECYCLE + INACTIVE_PERIOD + 1];
-        for n in INPUT.split(',') {
+        for n in self.input.split(',') {
             fish[n.parse::<usize>().unwrap()] += 1;
         }
         let _ = self.fish.replace(fish);

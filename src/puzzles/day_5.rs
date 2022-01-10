@@ -9,15 +9,13 @@ use crate::utils;
 use std::cmp;
 use std::collections::HashSet;
 
-const INPUT: &str = include_str!("../../input/5.txt");
-
 pub struct Day5 {
     vent_lines: Vec<Line>,
 }
 
 impl Day5 {
-    pub fn new() -> Self {
-        let vent_lines = utils::input_to_lines(INPUT).map(Line::from).collect();
+    pub fn new(input: &'static str) -> Self {
+        let vent_lines = utils::input_to_lines(input).map(Line::from).collect();
         Self { vent_lines }
     }
 

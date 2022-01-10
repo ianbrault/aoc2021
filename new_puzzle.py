@@ -13,6 +13,10 @@ mod_template = """\
 
 use crate::types::Puzzle;
 
+const INPUTS: [&str; <N>] = [
+<I>
+];
+
 pub fn all() -> Vec<Box<dyn Puzzle>> {
     vec![
 <P>
@@ -28,12 +32,10 @@ puzzle_template = """\
 
 use crate::types::{Puzzle, PuzzleError, Result, Solution};
 
-const INPUT: &str = include_str!("../../input/<D>.txt");
-
 pub struct Day<D> {}
 
 impl Day<D> {
-    pub fn new() -> Self {
+    pub fn new(input: &'static str) -> Self {
         Self {}
     }
 }
@@ -73,11 +75,18 @@ if __name__ == "__main__":
     # write the mod.rs file
     with open(os.path.join(puzzle_dir, "mod.rs"), "w") as mod_file:
         mods = "\n".join(f"mod day_{i + 1};" for i in range(n))
+        inputs = "\n".join(
+            f"    include_str!(\"../../input/{i + 1}.txt\"),"
+            for i in range(n))
         puzzles = "\n".join(
-            f"        Box::new(day_{i + 1}::Day{i + 1}::new()),"
+            f"        Box::new(day_{i + 1}::Day{i + 1}::new(INPUTS[{i}])),"
             for i in range(n))
         mod_file.write(
-            mod_template.replace("<M>", mods).replace("<P>", puzzles))
+            mod_template
+                .replace("<N>", str(n))
+                .replace("<M>", mods)
+                .replace("<I>", inputs)
+                .replace("<P>", puzzles))
 
     # touch the input file to prevent errors
     pathlib.Path(os.path.join(input_dir, f"{n}.txt")).touch()

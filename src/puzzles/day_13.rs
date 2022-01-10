@@ -8,8 +8,6 @@ use crate::types::{Point, Puzzle, Result, Solution};
 use std::cell::RefCell;
 use std::collections::HashSet;
 
-const INPUT: &str = include_str!("../../input/13.txt");
-
 #[derive(Debug)]
 enum Fold {
     X(i64),
@@ -44,8 +42,8 @@ pub struct Day13 {
 }
 
 impl Day13 {
-    pub fn new() -> Self {
-        match split!(INPUT, "\n\n") {
+    pub fn new(input: &'static str) -> Self {
+        match split!(input, "\n\n") {
             [point_strings, fold_strings] => {
                 let points = RefCell::new(point_strings.split('\n').map(Point::from).collect());
                 let folds = fold_strings.split('\n').map(Fold::from).collect();

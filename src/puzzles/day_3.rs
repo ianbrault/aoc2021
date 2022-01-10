@@ -6,7 +6,6 @@
 use crate::types::{Puzzle, Result, Solution};
 use crate::utils;
 
-const INPUT: &str = include_str!("../../input/3.txt");
 const N_BITS: usize = 12;
 
 #[derive(Clone)]
@@ -61,8 +60,8 @@ impl Day3 {
         bit_count
     }
 
-    pub fn new() -> Self {
-        let numbers = utils::input_to_lines(INPUT)
+    pub fn new(input: &'static str) -> Self {
+        let numbers = utils::input_to_lines(input)
             .map(Binary::from)
             .collect::<Vec<_>>();
         let bit_counts = Self::count_bits(&numbers);

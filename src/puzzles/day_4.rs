@@ -8,7 +8,6 @@ use crate::types::{Puzzle, PuzzleError, Result, Solution};
 use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
 
-const INPUT: &str = include_str!("../../input/4.txt");
 const BINGO_SIZE: usize = 5;
 
 #[derive(Debug)]
@@ -94,8 +93,8 @@ pub struct Day4 {
 }
 
 impl Day4 {
-    pub fn new() -> Self {
-        let parts = INPUT.split("\n\n").collect::<Vec<_>>();
+    pub fn new(input: &'static str) -> Self {
+        let parts = input.split("\n\n").collect::<Vec<_>>();
         let numbers = parts[0].split(',').map(|n| n.parse().unwrap()).collect();
         let bingo_boards = parts
             .iter()

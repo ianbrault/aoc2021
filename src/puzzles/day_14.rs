@@ -7,8 +7,6 @@ use crate::types::{Counter, Puzzle, Result, Solution};
 
 use std::collections::HashMap;
 
-const INPUT: &str = include_str!("../../input/14.txt");
-
 #[derive(Clone, Eq, Hash, PartialEq)]
 struct Pair(char, char);
 
@@ -45,8 +43,8 @@ pub struct Day14 {
 }
 
 impl Day14 {
-    pub fn new() -> Self {
-        match split!(INPUT, "\n\n") {
+    pub fn new(input: &'static str) -> Self {
+        match split!(input, "\n\n") {
             [template, rules_str] => {
                 let rules = rules_str.split('\n').map(Self::parse_rule).collect();
                 Self { template, rules }

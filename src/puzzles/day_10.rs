@@ -6,15 +6,13 @@
 use crate::types::{Puzzle, Result, Solution};
 use crate::utils;
 
-const INPUT: &str = include_str!("../../input/10.txt");
-
 pub struct Day10 {
     lines: Vec<&'static str>,
 }
 
 impl Day10 {
-    pub fn new() -> Self {
-        let lines = utils::input_to_lines(INPUT).collect();
+    pub fn new(input: &'static str) -> Self {
+        let lines = utils::input_to_lines(input).collect();
         Self { lines }
     }
 

@@ -7,8 +7,6 @@ use crate::types::{Puzzle, Result, Solution};
 
 use num::{Integer, NumCast};
 
-const INPUT: &str = include_str!("../../input/16.txt");
-
 #[derive(Debug, PartialEq)]
 enum PacketType {
     Sum,
@@ -144,8 +142,8 @@ pub struct Day16 {
 }
 
 impl Day16 {
-    pub fn new() -> Self {
-        let transmission = Self::parse_transmission(INPUT);
+    pub fn new(input: &'static str) -> Self {
+        let transmission = Self::parse_transmission(input);
         let packets = Self::parse_packets(transmission);
         Self { packets }
     }

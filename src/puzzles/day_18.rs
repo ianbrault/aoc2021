@@ -10,8 +10,6 @@ use std::cmp;
 use std::fmt;
 use std::ops::Add;
 
-const INPUT: &str = include_str!("../../input/18.txt");
-
 #[derive(Clone, Debug, PartialEq)]
 enum NumberType {
     Number(u8),
@@ -267,8 +265,8 @@ pub struct Day18 {
 }
 
 impl Day18 {
-    pub fn new() -> Self {
-        let numbers = utils::input_to_lines(INPUT)
+    pub fn new(input: &'static str) -> Self {
+        let numbers = utils::input_to_lines(input)
             .map(SnailfishNumber::from)
             .collect();
         Self { numbers }

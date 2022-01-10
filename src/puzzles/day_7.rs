@@ -5,15 +5,13 @@
 
 use crate::types::{Puzzle, Result, Solution};
 
-const INPUT: &str = include_str!("../../input/7.txt");
-
 pub struct Day7 {
     input: Vec<i64>,
 }
 
 impl Day7 {
-    pub fn new() -> Self {
-        let input = INPUT.split(',').map(|n| n.parse().unwrap()).collect();
+    pub fn new(input: &'static str) -> Self {
+        let input = input.split(',').map(|n| n.parse().unwrap()).collect();
         Self { input }
     }
 }

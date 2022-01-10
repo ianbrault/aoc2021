@@ -6,8 +6,6 @@
 use crate::types::{Puzzle, Result, Solution};
 use crate::utils;
 
-const INPUT: &str = include_str!("../../input/2.txt");
-
 enum Direction {
     Forward,
     Up,
@@ -83,8 +81,8 @@ pub struct Day2 {
 }
 
 impl Day2 {
-    pub fn new() -> Self {
-        let commands = utils::input_to_lines(INPUT).map(Command::from).collect();
+    pub fn new(input: &'static str) -> Self {
+        let commands = utils::input_to_lines(input).map(Command::from).collect();
 
         Self { commands }
     }

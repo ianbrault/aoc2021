@@ -6,15 +6,13 @@
 use crate::types::{Puzzle, Result, Solution};
 use crate::utils::{self, PairWith};
 
-const INPUT: &str = include_str!("../../input/1.txt");
-
 pub struct Day1 {
     sonar_depths: Vec<u64>,
 }
 
 impl Day1 {
-    pub fn new() -> Self {
-        let sonar_depths = utils::input_to_parsed_lines::<u64>(INPUT).collect();
+    pub fn new(input: &'static str) -> Self {
+        let sonar_depths = utils::input_to_parsed_lines::<u64>(input).collect();
         Self { sonar_depths }
     }
 }

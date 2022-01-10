@@ -8,8 +8,6 @@ use crate::types::{Array2D, Puzzle, Result, Solution};
 use std::cmp::Ordering;
 use std::collections::BinaryHeap;
 
-const INPUT: &str = include_str!("../../input/15.txt");
-
 const SIZE: usize = 100;
 const FULL_SIZE: usize = SIZE * 5;
 
@@ -49,8 +47,8 @@ pub struct Day15 {
 }
 
 impl Day15 {
-    pub fn new() -> Self {
-        let cave = Array2D::from(INPUT);
+    pub fn new(input: &'static str) -> Self {
+        let cave = Array2D::from(input);
         let mut cave_full = Array2D::new();
         Self::build_full_cave(&cave, &mut cave_full);
         Self { cave, cave_full }

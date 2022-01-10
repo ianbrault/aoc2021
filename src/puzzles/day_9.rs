@@ -8,7 +8,6 @@ use crate::types::{Array2D, Puzzle, Result, Solution};
 use std::collections::{HashSet, VecDeque};
 use std::convert::TryInto;
 
-const INPUT: &str = include_str!("../../input/9.txt");
 const WIDTH: usize = 100;
 const HEIGHT: usize = 100;
 
@@ -17,8 +16,8 @@ pub struct Day9 {
 }
 
 impl Day9 {
-    pub fn new() -> Self {
-        let heightmap = Array2D::from(INPUT);
+    pub fn new(input: &'static str) -> Self {
+        let heightmap = Array2D::from(input);
         Self { heightmap }
     }
 

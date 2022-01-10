@@ -7,10 +7,10 @@ use crate::types::{Array2D, Puzzle, PuzzleError, Result, Solution};
 
 use std::cell::RefCell;
 
-const INPUT: &str = include_str!("../../input/11.txt");
 const SIZE: usize = 10;
 
 pub struct Day11 {
+    input: &'static str,
     // need RefCell for interior mutability
     energy_levels: RefCell<Array2D<u8, SIZE, SIZE>>,
 }
@@ -20,9 +20,12 @@ impl Day11 {
         Array2D::from(s)
     }
 
-    pub fn new() -> Self {
-        let energy_levels = RefCell::new(Self::load_energy_levels(INPUT));
-        Self { energy_levels }
+    pub fn new(input: &'static str) -> Self {
+        let energy_levels = RefCell::new(Self::load_energy_levels(input));
+        Self {
+            input,
+            energy_levels,
+        }
     }
 
     // returns the number of flashes in the step
@@ -76,7 +79,9 @@ impl Puzzle for Day11 {
     // What is the first step during which all octopuses flash?
     fn part_2(&self) -> Result<Solution> {
         // first reset the grid
-        let _ = self.energy_levels.replace(Self::load_energy_levels(INPUT));
+        let _ = self
+            .energy_levels
+            .replace(Self::load_energy_levels(self.input));
 
         let all_flash = (SIZE * SIZE) as u64;
         for step in 0..u64::MAX {
@@ -99,7 +104,10 @@ mod tests {
 
     fn get_day() -> Day11 {
         let energy_levels = RefCell::new(Day11::load_energy_levels(TEST_INPUT));
-        Day11 { energy_levels }
+        Day11 {
+            input: TEST_INPUT,
+            energy_levels,
+        }
     }
 
     #[test]

@@ -8,16 +8,14 @@ use crate::types::{Puzzle, Result, Solution};
 use std::cmp;
 use std::ops::Range;
 
-const INPUT: &str = include_str!("../../input/17.txt");
-
 pub struct Day17 {
     x_range: Range<i64>,
     y_range: Range<i64>,
 }
 
 impl Day17 {
-    pub fn new() -> Self {
-        split_into!(INPUT, ": ", _x, ranges);
+    pub fn new(input: &'static str) -> Self {
+        split_into!(input, ": ", _x, ranges);
         split_into!(ranges, ", ", x, y);
         let x_range = Self::parse_range(x);
         let y_range = Self::parse_range(y);

@@ -8,17 +8,15 @@ use crate::utils;
 
 use std::collections::{HashMap, HashSet};
 
-const INPUT: &str = include_str!("../../input/12.txt");
-
 pub struct Day12 {
     cave_connections: HashMap<&'static str, Vec<&'static str>>,
 }
 
 impl Day12 {
-    pub fn new() -> Self {
+    pub fn new(input: &'static str) -> Self {
         let mut cave_connections = HashMap::new();
 
-        for line in utils::input_to_lines(INPUT) {
+        for line in utils::input_to_lines(input) {
             match split!(line, "-") {
                 [from, to] => {
                     // NOTE: cave connections are bi-directional!
