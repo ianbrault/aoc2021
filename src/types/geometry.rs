@@ -2,7 +2,9 @@
 ** src/types/geometry.rs
 */
 
-use crate::types::{Matrix2D, Vector2};
+use super::{FMatrix2x2, FVector2};
+// TODO: REPLACE WITH NALGEBRA
+// use nalgebra::{Matrix2, Vector2};
 
 use std::cmp;
 use std::fmt;
@@ -46,10 +48,14 @@ impl Point {
 impl From<&str> for Point {
     fn from(s: &str) -> Self {
         // format: x,y
-        let split = s.find(',').unwrap();
-        let x = s[0..split].parse().unwrap();
-        let y = s[(split + 1)..s.len()].parse().unwrap();
-        Self { x, y }
+        match split!(s, ',') {
+            [x_str, y_str] => {
+                let x = x_str.parse().unwrap();
+                let y = y_str.parse().unwrap();
+                Self { x, y }
+            }
+            _ => unreachable!(),
+        }
     }
 }
 
@@ -175,12 +181,12 @@ impl Line {
             // NOTE: start with numbers as floating point
             let ma = line_a.slope.unwrap() as f64;
             let mb = line_b.slope.unwrap() as f64;
-            let mat = Matrix2D::new(ma, -1.0, mb, -1.0);
-            let vec = Vector2::new(
+            let mat = FMatrix2x2::new(ma, -1.0, mb, -1.0);
+            let vec = FVector2::new(
                 -line_a.y_intercept.unwrap() as f64,
                 -line_b.y_intercept.unwrap() as f64,
             );
-            let sol = Matrix2D::solve_system(&mat, &vec);
+            let sol = FMatrix2x2::solve_system(&mat, &vec);
             let x = sol.data[0];
             let y = sol.data[1];
             // ensure that the intersection is a whole number

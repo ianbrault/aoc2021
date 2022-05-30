@@ -3,8 +3,10 @@
 */
 
 mod geometry;
+mod math;
 
 pub use self::geometry::{Line, Point};
+pub use self::math::{FMatrix2x2, FVector2};
 
 use crate::utils;
 
@@ -14,7 +16,6 @@ use std::collections::HashMap;
 use std::error;
 use std::fmt;
 use std::hash::Hash;
-use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
 
 pub type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
@@ -256,90 +257,6 @@ where
 {
     fn default() -> Self {
         Self::new()
-    }
-}
-
-macro_rules! bind_els {
-    ($self:expr, $a:ident, $b:ident) => {
-        let $a = $self.data[0];
-        let $b = $self.data[1];
-    };
-    ($self:expr, $a:ident, $b:ident, $c:ident, $d:ident) => {
-        let $a = $self.data[0];
-        let $b = $self.data[1];
-        let $c = $self.data[2];
-        let $d = $self.data[3];
-    };
-}
-
-pub struct Vector2<T> {
-    pub data: [T; 2],
-}
-
-impl<T> Vector2<T> {
-    pub fn new(a: T, b: T) -> Self {
-        let data = [a, b];
-        Self { data }
-    }
-}
-
-impl<T> Div<T> for Vector2<T>
-where
-    T: Copy,
-    T: Div<T, Output = T>,
-{
-    type Output = Vector2<T>;
-
-    fn div(self, rhs: T) -> Self::Output {
-        bind_els!(self, a, b);
-        Vector2::new(a / rhs, b / rhs)
-    }
-}
-
-pub struct Matrix2D<T> {
-    data: [T; 4],
-}
-
-impl<T> Matrix2D<T>
-where
-    T: Copy,
-    T: Add<T, Output = T>,
-    T: Div<T, Output = T>,
-    T: Mul<T, Output = T>,
-    T: Neg<Output = T>,
-    T: Sub<T, Output = T>,
-{
-    pub fn new(a: T, b: T, c: T, d: T) -> Self {
-        let data = [a, b, c, d];
-        Self { data }
-    }
-
-    pub fn determinant(&self) -> T {
-        bind_els!(&self, a, b, c, d);
-        (a * d) - (b * c)
-    }
-
-    pub fn solve_system(m: &Self, v: &Vector2<T>) -> Vector2<T> {
-        bind_els!(m, a, b, c, d);
-        // note: save the division for last in case of integer division
-        let det = m.determinant();
-        let m_inv = Self::new(d, -b, -c, a);
-        (m_inv * v) / det
-    }
-}
-
-impl<T> Mul<&Vector2<T>> for Matrix2D<T>
-where
-    T: Copy,
-    T: Add<T, Output = T>,
-    T: Mul<T, Output = T>,
-{
-    type Output = Vector2<T>;
-
-    fn mul(self, rhs: &Vector2<T>) -> Self::Output {
-        bind_els!(self, a, b, c, d);
-        bind_els!(rhs, e, f);
-        Vector2::new((a * e) + (b * f), (c * e) + (d * f))
     }
 }
 

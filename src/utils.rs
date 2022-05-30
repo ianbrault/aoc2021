@@ -46,6 +46,19 @@ where
     input_to_lines(input).map(|s| s.parse::<T>().unwrap())
 }
 
+// selects the other element in a 2-wide array
+pub fn other<T>(array: [T; 2], val: T) -> T
+where
+    T: PartialEq,
+    T: Copy,
+{
+    if array[0] == val {
+        array[1]
+    } else {
+        array[0]
+    }
+}
+
 // takes an iterator and transforms it into a new iterator which combines the
 // current and next elements using the provided function
 pub struct PairWithIter<I, F>
@@ -113,17 +126,4 @@ where
     I: Iterator<Item = &'a N>,
     F: Fn(&'a N, &'a N) -> T,
 {
-}
-
-// selects the other element in a 2-wide array
-pub fn other<T>(array: [T; 2], val: T) -> T
-where
-    T: PartialEq,
-    T: Copy,
-{
-    if array[0] == val {
-        array[1]
-    } else {
-        array[0]
-    }
 }
