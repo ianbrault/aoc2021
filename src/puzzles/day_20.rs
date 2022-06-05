@@ -3,7 +3,7 @@
 ** https://adventofcode.com/2021/day/20
 */
 
-use crate::types::{Puzzle, PuzzleError, Result, Solution};
+use crate::types::{Puzzle, Result, Solution};
 
 const IMG_ENH_ALG_SIZE: usize = 512;
 const INPUT_SIZE: usize = 100;
@@ -108,9 +108,8 @@ impl Image {
     fn window(&self, i: usize, j: usize, default_pixel: Pixel) -> u16 {
         let mut n = 0;
         for (offset, (di, dj)) in itertools::enumerate(itertools::iproduct!(-1..=1, -1..=1)) {
-            match self.get_or(i, j, di, dj, default_pixel) {
-                Pixel::Light => n |= 1 << (8 - offset),
-                _ => (),
+            if let Pixel::Light = self.get_or(i, j, di, dj, default_pixel) {
+                n |= 1 << (8 - offset);
             };
         }
         n

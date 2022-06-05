@@ -178,6 +178,7 @@ impl Reflection {
     }
 }
 
+#[allow(clippy::from_over_into)]
 impl Into<u8> for Reflection {
     fn into(self) -> u8 {
         match self {
@@ -275,6 +276,7 @@ impl Day19 {
             .insert(scanner, reflection);
     }
 
+    #[allow(clippy::type_complexity)]
     fn find_matching_beacon_pairs(
         &self,
         scanner_a: usize,
