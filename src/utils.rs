@@ -7,14 +7,14 @@ use std::str::FromStr;
 
 // a macro for a split-and-match pattern which is used frequently
 macro_rules! split {
-    ($string:ident, $splitter:expr) => {
+    ($string:expr, $splitter:expr) => {
         $string.split($splitter).collect::<Vec<&str>>().as_slice()
     };
 }
 
 // similar to the split! macro above, but binds the provided identifiers
 macro_rules! split_into {
-    ($string:ident, $splitter:expr, $($var:ident),+) => {
+    ($string:expr, $splitter:expr, $($var:ident),+) => {
         let ($($var),+) = match split!($string, $splitter) {
             [$($var),+] => ($(*$var),+),
             _ => unreachable!(),

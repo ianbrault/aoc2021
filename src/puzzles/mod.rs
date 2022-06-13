@@ -3,14 +3,6 @@
 */
 
 mod day_1;
-mod day_2;
-mod day_3;
-mod day_4;
-mod day_5;
-mod day_6;
-mod day_7;
-mod day_8;
-mod day_9;
 mod day_10;
 mod day_11;
 mod day_12;
@@ -21,12 +13,21 @@ mod day_16;
 mod day_17;
 mod day_18;
 mod day_19;
+mod day_2;
 mod day_20;
 mod day_21;
+mod day_22;
+mod day_3;
+mod day_4;
+mod day_5;
+mod day_6;
+mod day_7;
+mod day_8;
+mod day_9;
 
 use crate::types::Puzzle;
 
-const INPUTS: [&str; 21] = [
+const INPUTS: [&str; 22] = [
     include_str!("../../input/1.txt"),
     include_str!("../../input/2.txt"),
     include_str!("../../input/3.txt"),
@@ -48,6 +49,7 @@ const INPUTS: [&str; 21] = [
     include_str!("../../input/19.txt"),
     include_str!("../../input/20.txt"),
     include_str!("../../input/21.txt"),
+    include_str!("../../input/22.txt"),
 ];
 
 pub fn all() -> Vec<Box<dyn Puzzle>> {
@@ -73,5 +75,6 @@ pub fn all() -> Vec<Box<dyn Puzzle>> {
         Box::new(day_19::Day19::new(INPUTS[18])),
         Box::new(day_20::Day20::new(INPUTS[19])),
         Box::new(day_21::Day21::new(INPUTS[20])),
+        Box::new(day_22::Day22::new(INPUTS[21])),
     ]
 }
